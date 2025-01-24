@@ -180,3 +180,4 @@
 /workspaces/CarSpot/CarSpot/obj/Debug/net8.0/CarSpot.pdb
 /workspaces/CarSpot/CarSpot/obj/Debug/net8.0/CarSpot.genruntimeconfig.cache
 /workspaces/CarSpot/CarSpot/obj/Debug/net8.0/ref/CarSpot.dll
+/workspaces/CarSpot/CarSpot/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll

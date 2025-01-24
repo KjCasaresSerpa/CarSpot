@@ -1,6 +1,6 @@
 
 
-using System.Text;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,56 +20,56 @@ public class UsuariosController : ControllerBase
 
     
     [HttpPost]
-    public async Task<ActionResult<User>> CrearUsuario(User user)
-    {
-       
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+    public ActionResult<User> CrearUsuario(User user)
+{
+    _context.Users.Add(user);
+    _context.SaveChanges();
 
-        return CreatedAtAction(nameof(CrearUsuario), new { id = user.Id }, user);
-    }
+    return CreatedAtAction(nameof(CrearUsuario), new { id = user.Id }, user);
+}
+
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsuarios()
+    public ActionResult<IEnumerable<User>> GetUsuarios()
     {
-            
-            var usuarios = await _context.Users.ToListAsync();
+    var usuarios = _context.Users.ToList();
 
-            return Ok(usuarios);
+    return Ok(usuarios);
     }
+
 
         
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUsuario(int id)
+    public ActionResult<User> GetUsuario(int id)
     {
-            
-            var usuario = await _context.Users.FindAsync(id);
+    var usuario = _context.Users.Find(id);
 
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(usuario);
+    if (usuario == null)
+    {
+        return NotFound();
     }
+
+    return Ok(usuario);
+    }
+
 
         
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUsuario(int id)
+    public IActionResult DeleteUsuario(int id)
     {
-            
-            var usuario = await _context.Users.FindAsync(id);
-            if (usuario == null)
-            {
-                return NotFound(); 
-            }
+    var usuario = _context.Users.Find(id);
 
-            
-            _context.Users.Remove(usuario);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+    if (usuario == null)
+    {
+        return NotFound();
     }
+
+    _context.Users.Remove(usuario);
+    _context.SaveChanges();
+
+    return NoContent();
+    }
+
 
         
         private static List<User> usuarios = new List<User>

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "YlhB7ihfBQs=",
+  "dgSpecHash": "SUxsKUwTOKU=",
   "success": true,
   "projectFilePath": "/workspaces/CarSpot/CarSpot/CarSpot.csproj",
   "expectedPackageFiles": [
@@ -23,6 +23,7 @@
     "/home/codespace/.nuget/packages/microsoft.entityframeworkcore.abstractions/9.0.1/microsoft.entityframeworkcore.abstractions.9.0.1.nupkg.sha512",
     "/home/codespace/.nuget/packages/microsoft.entityframeworkcore.analyzers/9.0.1/microsoft.entityframeworkcore.analyzers.9.0.1.nupkg.sha512",
     "/home/codespace/.nuget/packages/microsoft.entityframeworkcore.design/9.0.1/microsoft.entityframeworkcore.design.9.0.1.nupkg.sha512",
+    "/home/codespace/.nuget/packages/microsoft.entityframeworkcore.inmemory/9.0.1/microsoft.entityframeworkcore.inmemory.9.0.1.nupkg.sha512",
     "/home/codespace/.nuget/packages/microsoft.entityframeworkcore.relational/9.0.1/microsoft.entityframeworkcore.relational.9.0.1.nupkg.sha512",
     "/home/codespace/.nuget/packages/microsoft.entityframeworkcore.sqlserver/9.0.1/microsoft.entityframeworkcore.sqlserver.9.0.1.nupkg.sha512",
     "/home/codespace/.nuget/packages/microsoft.entityframeworkcore.tools/9.0.1/microsoft.entityframeworkcore.tools.9.0.1.nupkg.sha512",

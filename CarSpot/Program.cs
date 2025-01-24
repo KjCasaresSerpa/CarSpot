@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+
 
 
  
@@ -10,17 +10,26 @@ using Microsoft.Extensions.DependencyInjection;
     
 
         builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
+        builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseInMemoryDatabase("InMemoryDb"));
+        
+        /*builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));*/
+
+        
         var app = builder.Build();
 
+       
         // Configurar middleware de autenticación y autorización
         app.UseAuthentication();
         app.UseAuthorization();
 
 
-        // Configura la conexión a la base de datos
-        builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+       
+       
 
 
         // Configure the HTTP request pipeline.
