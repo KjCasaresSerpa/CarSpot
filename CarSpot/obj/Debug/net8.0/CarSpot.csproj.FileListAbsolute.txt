@@ -181,3 +181,4 @@
 /workspaces/CarSpot/CarSpot/obj/Debug/net8.0/CarSpot.genruntimeconfig.cache
 /workspaces/CarSpot/CarSpot/obj/Debug/net8.0/ref/CarSpot.dll
 /workspaces/CarSpot/CarSpot/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll
+/workspaces/CarSpot/CarSpot/bin/Debug/net8.0/BCrypt.Net-Next.dll

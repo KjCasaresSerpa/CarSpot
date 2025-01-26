@@ -1,6 +1,6 @@
 
 
-
+using BCrypt.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsuariosController : ControllerBase
+public class UserController : ControllerBase
 {
     private readonly AppDbContext _context;
 
-    public UsuariosController(AppDbContext context)
+    public UserController(AppDbContext context)
     {
         _context = context;
     }
@@ -93,6 +93,62 @@ public class UsuariosController : ControllerBase
             
             return Ok("Login exitoso");
         }
+        
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+        var user = await _context.Users.FindAsync(request.UserId);
+        if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+
+        if (!VerifyPassword(request.CurrentPassword, user.Password))
+            {
+                return BadRequest("Current password is incorrect");
+            }
+
+    
+        user.Password = HashPassword(request.NewPassword);
+        await _context.SaveChangesAsync();
+
+        return Ok("Password changed successfully");
+    }
+
+    private bool VerifyPassword(string password, string storedHash)
+        {
+    
+             return BCrypt.Net.BCrypt.Verify(password, storedHash);
+
+        }
+
+    private string HashPassword(string password)
+    {
+    
+        return BCrypt.Net.BCrypt.HashPassword(password);
+
+    }
+
+    [HttpPost("block-user/{userId}")]
+    public async Task<IActionResult> BlockUser(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                {
+                    return NotFound("User not found");
+                }
+
+    
+            user.IsBlocked = true;
+    
+            // user.BlockedUntil = DateTime.UtcNow.AddDays(30);  // Si usas una fecha para el bloqueo temporal
+
+        await _context.SaveChangesAsync();
+
+        return Ok("User has been blocked");
+    }
+
 
        
 }
