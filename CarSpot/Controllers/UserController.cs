@@ -94,27 +94,27 @@ public class UserController : ControllerBase
             return Ok("Login exitoso");
         }
         
-        [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
-        {
-        var user = await _context.Users.FindAsync(request.UserId);
-        if (user == null)
+       [HttpPost("change-password")]
+        public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
             {
-                return NotFound("User not found");
-            }
-
-
-        if (!VerifyPassword(request.CurrentPassword, user.Password))
-            {
-                return BadRequest("Current password is incorrect");
-            }
-
+                var user = _context.Users.Find(request.UserId);
     
-        user.Password = HashPassword(request.NewPassword);
-        await _context.SaveChangesAsync();
+                if (user == null)
+                    {
+                        return NotFound("User not found");
+                    }
 
-        return Ok("Password changed successfully");
-    }
+            if (!VerifyPassword(request.CurrentPassword, user.Password))
+                {
+                    return BadRequest("Current password is incorrect");
+                }
+
+    user.Password = HashPassword(request.NewPassword);
+    _context.SaveChanges(); 
+
+    return Ok("Password changed successfully");
+}
+
 
     private bool VerifyPassword(string password, string storedHash)
         {
@@ -130,24 +130,25 @@ public class UserController : ControllerBase
 
     }
 
-    [HttpPost("block-user/{userId}")]
-    public async Task<IActionResult> BlockUser(int userId)
+   [HttpPost("block-user/{userId}")]
+    public IActionResult BlockUser(int userId)
         {
-            var user = await _context.Users.FindAsync(userId);
+            var user = _context.Users.Find(userId);
+    
             if (user == null)
                 {
                     return NotFound("User not found");
                 }
 
+        user.IsBlocked = true;
     
-            user.IsBlocked = true;
-    
-            // user.BlockedUntil = DateTime.UtcNow.AddDays(30);  // Si usas una fecha para el bloqueo temporal
 
-        await _context.SaveChangesAsync();
+
+        _context.SaveChanges();
 
         return Ok("User has been blocked");
-    }
+}
+
 
 
        
