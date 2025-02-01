@@ -15,27 +15,27 @@ public class VehicleController : ControllerBase
     
     [HttpPost]
 public ActionResult<Vehicle> CreateVehicle(Vehicle vehicle)
-{
+    {
 
     if (string.IsNullOrEmpty(vehicle.Make) || string.IsNullOrEmpty(vehicle.Model))
     {
         return BadRequest("La marca y el modelo son obligatorios.");
     }
 
-    if (vehicle.Price <= 0)
+    if (vehicle.PriceStart <= 0)
     {
         return BadRequest("El precio debe ser un valor positivo.");
     }
 
     _context.Vehicles.Add(vehicle);
     _context.SaveChanges();
-    return CreatedAtAction(nameof(GetVehicle), new { id = vehicle.Id }, vehicle);
-}
+    return CreatedAtAction(nameof(GetVehicle), new { id = vehicle.UserId }, vehicle);
+    }
 
 
     
-    [HttpGet("{id}")]
-    public ActionResult<Vehicle> GetVehicle(int id)
+[HttpGet("{id}")]
+public ActionResult<Vehicle> GetVehicle(int id)
     {
         var vehicle = _context.Vehicles.Find(id);
         if (vehicle == null)
@@ -46,10 +46,10 @@ public ActionResult<Vehicle> CreateVehicle(Vehicle vehicle)
     }
 
     
-    [HttpPut("{id}")]
-    public IActionResult UpdateVehicle(int id, Vehicle vehicle)
+[HttpPut("{id}")]
+public IActionResult UpdateVehicle(int id, Vehicle vehicle)
     {
-        if (id != vehicle.Id)
+        if (id != vehicle.UserId)
         {
             return BadRequest();
         }
@@ -61,8 +61,8 @@ public ActionResult<Vehicle> CreateVehicle(Vehicle vehicle)
     }
 
     
-    [HttpDelete("{id}")]
-    public IActionResult DeleteVehicle(int id)
+[HttpDelete("{id}")]
+public IActionResult DeleteVehicle(int id)
     {
         var vehicle = _context.Vehicles.Find(id);
         if (vehicle == null)
@@ -77,83 +77,199 @@ public ActionResult<Vehicle> CreateVehicle(Vehicle vehicle)
     }
 
     
-    [HttpGet("user/{userId}")]
-    public ActionResult<IEnumerable<Vehicle>> GetUserVehicles(int userId)
+[HttpGet("user/{userId}")]
+public ActionResult<IEnumerable<Vehicle>> GetUserVehicles(int userId)
+    
     {
         var vehicles = _context.Vehicles.Where(v => v.UserId == userId).ToList();
         return Ok(vehicles);
     }
 
 
-
-    [HttpGet("filter")]
-public ActionResult<IEnumerable<Vehicle>> FilterVehicles(
-    [FromQuery] string make = null,
-    [FromQuery] string model = null,
-    [FromQuery] int? yearStart = null,
-    [FromQuery] int? yearEnd = null,
-    [FromQuery] decimal? priceStart = null,
-    [FromQuery] decimal? priceEnd = null,
-    [FromQuery] string city = null,
-    [FromQuery] string condition = null,
-    [FromQuery] string transmissionType = null,
-    [FromQuery] string color = null)
+[HttpPost("filter")]
+public ActionResult<IEnumerable<Vehicle>> FilterVehicles([FromBody] Vehicle filterRequest)
+    
 {
     var query = _context.Vehicles.AsQueryable();
 
-    if (!string.IsNullOrEmpty(make))
+    if (!string.IsNullOrEmpty(filterRequest.Make))
     {
-        query = query.Where(v => v.Make.Contains(make));
+        query = query.Where(v => v.Make.Contains(filterRequest.Make));
     }
 
-    if (!string.IsNullOrEmpty(model))
+    if (!string.IsNullOrEmpty(filterRequest.Model))
     {
-        query = query.Where(v => v.Model.Contains(model));
+        query = query.Where(v => v.Model.Contains(filterRequest.Model));
     }
 
-    if (yearStart.HasValue)
+    if (filterRequest.YearStart.HasValue)
     {
-        query = query.Where(v => v.Year >= yearStart.Value);
+        query = query.Where(v => v.YearStart >= filterRequest.YearStart.Value);
     }
 
-    if (yearEnd.HasValue)
+    if (filterRequest.YearEnd.HasValue)
     {
-        query = query.Where(v => v.Year <= yearEnd.Value);
+        query = query.Where(v => v.YearStart <= filterRequest.YearEnd.Value);
     }
 
-    if (priceStart.HasValue)
+    if (filterRequest.PriceStart.HasValue)
     {
-        query = query.Where(v => v.Price >= priceStart.Value);
+        query = query.Where(v => v.PriceStart >= filterRequest.PriceStart.Value);
     }
 
-    if (priceEnd.HasValue)
+    if (filterRequest.PriceEnd.HasValue)
     {
-        query = query.Where(v => v.Price <= priceEnd.Value);
+        query = query.Where(v => v.PriceStart <= filterRequest.PriceEnd.Value);
     }
 
-    if (!string.IsNullOrEmpty(city))
+    if (!string.IsNullOrEmpty(filterRequest.City))
     {
-        query = query.Where(v => v.City.Contains(city));
+        query = query.Where(v => v.City.Contains(filterRequest.City));
     }
 
-    if (!string.IsNullOrEmpty(condition))
+    if (!string.IsNullOrEmpty(filterRequest.Condition))
     {
-        query = query.Where(v => v.Condition.Equals(condition, StringComparison.OrdinalIgnoreCase));
+        query = query.Where(v => v.Condition.Equals(filterRequest.Condition, StringComparison.OrdinalIgnoreCase));
     }
 
-    if (!string.IsNullOrEmpty(transmissionType))
+    if (!string.IsNullOrEmpty(filterRequest.TransmissionType))
     {
-        query = query.Where(v => v.TransmissionType.Contains(transmissionType));
+        query = query.Where(v => v.TransmissionType.Contains(filterRequest.TransmissionType));
     }
 
-    if (!string.IsNullOrEmpty(color))
+    if (!string.IsNullOrEmpty(filterRequest.Color))
     {
-        query = query.Where(v => v.Color.Contains(color));
+        query = query.Where(v => v.Color.Contains(filterRequest.Color));
     }
 
     var vehicles = query.ToList();
-    
+
     return Ok(vehicles);
+}
+
+[HttpPost("filter")]
+public ActionResult<Vehicle> FilterVehicles1([FromBody] Vehicle filterRequest)
+{
+    var query = _context.Vehicles.AsQueryable();
+
+    if (!string.IsNullOrEmpty(filterRequest.Make))
+    {
+        query = query.Where(v => v.Make.Contains(filterRequest.Make));
+    }
+
+    if (!string.IsNullOrEmpty(filterRequest.Model))
+    {
+        query = query.Where(v => v.Model.Contains(filterRequest.Model));
+    }
+
+    if (filterRequest.YearStart.HasValue)
+    {
+        query = query.Where(v => v.YearStart >= filterRequest.YearStart.Value);
+    }
+
+    if (filterRequest.YearEnd.HasValue)
+    {
+        query = query.Where(v => v.YearStart <= filterRequest.YearEnd.Value);
+    }
+
+    if (filterRequest.PriceStart.HasValue)
+    {
+        query = query.Where(v => v.PriceStart >= filterRequest.PriceStart.Value);
+    }
+
+    if (filterRequest.PriceEnd.HasValue)
+    {
+        query = query.Where(v => v.PriceStart <= filterRequest.PriceEnd.Value);
+    }
+
+    if (!string.IsNullOrEmpty(filterRequest.City))
+    {
+        query = query.Where(v => v.City.Contains(filterRequest.City));
+    }
+
+    if (!string.IsNullOrEmpty(filterRequest.Condition))
+    {
+        query = query.Where(v => v.Condition.Equals(filterRequest.Condition, StringComparison.OrdinalIgnoreCase));
+    }
+
+    if (!string.IsNullOrEmpty(filterRequest.TransmissionType))
+    {
+        query = query.Where(v => v.TransmissionType.Contains(filterRequest.TransmissionType));
+    }
+
+    if (!string.IsNullOrEmpty(filterRequest.Color))
+    {
+        query = query.Where(v => v.Color.Contains(filterRequest.Color));
+    }
+
+    var vehicle = query.FirstOrDefault(); 
+
+    if (vehicle == null)
+    {
+        return NotFound("No vehicle found matching the criteria.");
+    }
+
+    return Ok(vehicle);
+}
+
+[HttpPost("filter")]
+public ActionResult<bool> FilterVehicles2([FromBody] Vehicle filterRequest)
+{
+    var query = _context.Vehicles.AsQueryable();
+
+    if (!string.IsNullOrEmpty(filterRequest.Make))
+    {
+        query = query.Where(v => v.Make.Contains(filterRequest.Make));
+    }
+
+    if (!string.IsNullOrEmpty(filterRequest.Model))
+    {
+        query = query.Where(v => v.Model.Contains(filterRequest.Model));
+    }
+
+    if (filterRequest.YearStart.HasValue)
+    {
+        query = query.Where(v => v.YearStart >= filterRequest.YearStart.Value);
+    }
+
+    if (filterRequest.YearEnd.HasValue)
+    {
+        query = query.Where(v => v.YearStart <= filterRequest.YearEnd.Value);
+    }
+
+    if (filterRequest.PriceStart.HasValue)
+    {
+        query = query.Where(v => v.PriceStart >= filterRequest.PriceStart.Value);
+    }
+
+    if (filterRequest.PriceEnd.HasValue)
+    {
+        query = query.Where(v => v.PriceStart <= filterRequest.PriceEnd.Value);
+    }
+
+    if (!string.IsNullOrEmpty(filterRequest.City))
+    {
+        query = query.Where(v => v.City.Contains(filterRequest.City));
+    }
+
+    if (!string.IsNullOrEmpty(filterRequest.Condition))
+    {
+        query = query.Where(v => v.Condition.Equals(filterRequest.Condition, StringComparison.OrdinalIgnoreCase));
+    }
+
+    if (!string.IsNullOrEmpty(filterRequest.TransmissionType))
+    {
+        query = query.Where(v => v.TransmissionType.Contains(filterRequest.TransmissionType));
+    }
+
+    if (!string.IsNullOrEmpty(filterRequest.Color))
+    {
+        query = query.Where(v => v.Color.Contains(filterRequest.Color));
+    }
+
+    bool anyVehicles = query.Any(); 
+
+    return Ok(anyVehicles);
 }
 
 }
