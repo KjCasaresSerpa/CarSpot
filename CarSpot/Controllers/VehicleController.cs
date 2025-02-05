@@ -85,9 +85,9 @@ public ActionResult<IEnumerable<Vehicle>> GetUserVehicles(int userId)
         return Ok(vehicles);
     }
 
-
-[HttpPost("filter")]
-public ActionResult<IEnumerable<Vehicle>> FilterVehicles([FromBody] Vehicle filterRequest)
+[Route("filter")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> FilterVehicles([FromQuery] Vehicle filterRequest)
     
 {
     var query = _context.Vehicles.AsQueryable();
@@ -97,45 +97,156 @@ public ActionResult<IEnumerable<Vehicle>> FilterVehicles([FromBody] Vehicle filt
         query = query.Where(v => v.Make.Contains(filterRequest.Make));
     }
 
+    var vehicles = query.ToList();
+
+    return Ok(vehicles);
+}
+
+   
+[Route("filter1")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> Filter1Vehicles([FromQuery] Vehicle filterRequest)
+    
+{
+    var query = _context.Vehicles.AsQueryable();
+
     if (!string.IsNullOrEmpty(filterRequest.Model))
     {
         query = query.Where(v => v.Model.Contains(filterRequest.Model));
     }
 
-    if (filterRequest.YearStart.HasValue)
+    var vehicles = query.ToList();
+
+    return Ok(vehicles);
+}
+
+
+
+[Route("filter2")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> Filter2Vehicles([FromQuery] Vehicle filterRequest)
+    
+{
+    var query = _context.Vehicles.AsQueryable();
+
+     if (filterRequest.YearStart != null)
     {
-        query = query.Where(v => v.YearStart >= filterRequest.YearStart.Value);
+        query = query.Where(v => v.YearStart == filterRequest.YearStart);
     }
 
-    if (filterRequest.YearEnd.HasValue)
+    var vehicles = query.ToList();
+
+    return Ok(vehicles);
+}
+
+[Route("filter3")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> Filter3Vehicles([FromQuery] Vehicle filterRequest)
+    
+{
+    var query = _context.Vehicles.AsQueryable();
+
+     if (filterRequest.YearEnd != null)
     {
-        query = query.Where(v => v.YearStart <= filterRequest.YearEnd.Value);
+        query = query.Where(v => v.YearEnd == filterRequest.YearEnd);
     }
 
-    if (filterRequest.PriceStart.HasValue)
+    var vehicles = query.ToList();
+
+    return Ok(vehicles);
+}
+
+[Route("filter4")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> Filter4Vehicles([FromQuery] Vehicle filterRequest)
+    
+{
+    var query = _context.Vehicles.AsQueryable();
+
+     if (filterRequest.PriceStart != null)
     {
-        query = query.Where(v => v.PriceStart >= filterRequest.PriceStart.Value);
+        query = query.Where(v => v.PriceStart == filterRequest.PriceStart);
     }
 
-    if (filterRequest.PriceEnd.HasValue)
+    var vehicles = query.ToList();
+
+    return Ok(vehicles);
+}
+
+[Route("filter5")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> Filter5Vehicles([FromQuery] Vehicle filterRequest)
+    
+{
+    var query = _context.Vehicles.AsQueryable();
+
+     if (filterRequest.PriceEnd != null)
     {
-        query = query.Where(v => v.PriceStart <= filterRequest.PriceEnd.Value);
+        query = query.Where(v => v.PriceEnd == filterRequest.PriceEnd);
     }
+
+    var vehicles = query.ToList();
+
+    return Ok(vehicles);
+}
+
+[Route("filter6")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> Filter6Vehicles([FromQuery] Vehicle filterRequest)
+    
+{
+    var query = _context.Vehicles.AsQueryable();
 
     if (!string.IsNullOrEmpty(filterRequest.City))
     {
         query = query.Where(v => v.City.Contains(filterRequest.City));
     }
 
+    var vehicles = query.ToList();
+
+    return Ok(vehicles);
+}
+
+[Route("filter7")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> Filter7Vehicles([FromQuery] Vehicle filterRequest)
+    
+{
+    var query = _context.Vehicles.AsQueryable();
+
     if (!string.IsNullOrEmpty(filterRequest.Condition))
     {
-        query = query.Where(v => v.Condition.Equals(filterRequest.Condition, StringComparison.OrdinalIgnoreCase));
+        query = query.Where(v => v.Condition.Contains(filterRequest.Condition));
     }
+
+    var vehicles = query.ToList();
+
+    return Ok(vehicles);
+}
+
+[Route("filter8")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> Filter8Vehicles([FromQuery] Vehicle filterRequest)
+    
+{
+    var query = _context.Vehicles.AsQueryable();
 
     if (!string.IsNullOrEmpty(filterRequest.TransmissionType))
     {
         query = query.Where(v => v.TransmissionType.Contains(filterRequest.TransmissionType));
     }
+
+    var vehicles = query.ToList();
+
+    return Ok(vehicles);
+}
+
+[Route("filter9")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> Filter9Vehicles([FromQuery] Vehicle filterRequest)
+    
+{
+    var query = _context.Vehicles.AsQueryable();
 
     if (!string.IsNullOrEmpty(filterRequest.Color))
     {
@@ -147,129 +258,7 @@ public ActionResult<IEnumerable<Vehicle>> FilterVehicles([FromBody] Vehicle filt
     return Ok(vehicles);
 }
 
-[HttpPost("filter")]
-public ActionResult<Vehicle> FilterVehicles1([FromBody] Vehicle filterRequest)
-{
-    var query = _context.Vehicles.AsQueryable();
 
-    if (!string.IsNullOrEmpty(filterRequest.Make))
-    {
-        query = query.Where(v => v.Make.Contains(filterRequest.Make));
-    }
-
-    if (!string.IsNullOrEmpty(filterRequest.Model))
-    {
-        query = query.Where(v => v.Model.Contains(filterRequest.Model));
-    }
-
-    if (filterRequest.YearStart.HasValue)
-    {
-        query = query.Where(v => v.YearStart >= filterRequest.YearStart.Value);
-    }
-
-    if (filterRequest.YearEnd.HasValue)
-    {
-        query = query.Where(v => v.YearStart <= filterRequest.YearEnd.Value);
-    }
-
-    if (filterRequest.PriceStart.HasValue)
-    {
-        query = query.Where(v => v.PriceStart >= filterRequest.PriceStart.Value);
-    }
-
-    if (filterRequest.PriceEnd.HasValue)
-    {
-        query = query.Where(v => v.PriceStart <= filterRequest.PriceEnd.Value);
-    }
-
-    if (!string.IsNullOrEmpty(filterRequest.City))
-    {
-        query = query.Where(v => v.City.Contains(filterRequest.City));
-    }
-
-    if (!string.IsNullOrEmpty(filterRequest.Condition))
-    {
-        query = query.Where(v => v.Condition.Equals(filterRequest.Condition, StringComparison.OrdinalIgnoreCase));
-    }
-
-    if (!string.IsNullOrEmpty(filterRequest.TransmissionType))
-    {
-        query = query.Where(v => v.TransmissionType.Contains(filterRequest.TransmissionType));
-    }
-
-    if (!string.IsNullOrEmpty(filterRequest.Color))
-    {
-        query = query.Where(v => v.Color.Contains(filterRequest.Color));
-    }
-
-    var vehicle = query.FirstOrDefault(); 
-
-    if (vehicle == null)
-    {
-        return NotFound("No vehicle found matching the criteria.");
-    }
-
-    return Ok(vehicle);
-}
-
-[HttpPost("filter")]
-public ActionResult<bool> FilterVehicles2([FromBody] Vehicle filterRequest)
-{
-    var query = _context.Vehicles.AsQueryable();
-
-    if (!string.IsNullOrEmpty(filterRequest.Make))
-    {
-        query = query.Where(v => v.Make.Contains(filterRequest.Make));
-    }
-
-    if (!string.IsNullOrEmpty(filterRequest.Model))
-    {
-        query = query.Where(v => v.Model.Contains(filterRequest.Model));
-    }
-
-    if (filterRequest.YearStart.HasValue)
-    {
-        query = query.Where(v => v.YearStart >= filterRequest.YearStart.Value);
-    }
-
-    if (filterRequest.YearEnd.HasValue)
-    {
-        query = query.Where(v => v.YearStart <= filterRequest.YearEnd.Value);
-    }
-
-    if (filterRequest.PriceStart.HasValue)
-    {
-        query = query.Where(v => v.PriceStart >= filterRequest.PriceStart.Value);
-    }
-
-    if (filterRequest.PriceEnd.HasValue)
-    {
-        query = query.Where(v => v.PriceStart <= filterRequest.PriceEnd.Value);
-    }
-
-    if (!string.IsNullOrEmpty(filterRequest.City))
-    {
-        query = query.Where(v => v.City.Contains(filterRequest.City));
-    }
-
-    if (!string.IsNullOrEmpty(filterRequest.Condition))
-    {
-        query = query.Where(v => v.Condition.Equals(filterRequest.Condition, StringComparison.OrdinalIgnoreCase));
-    }
-
-    if (!string.IsNullOrEmpty(filterRequest.TransmissionType))
-    {
-        query = query.Where(v => v.TransmissionType.Contains(filterRequest.TransmissionType));
-    }
-
-    if (!string.IsNullOrEmpty(filterRequest.Color))
-    {
-        query = query.Where(v => v.Color.Contains(filterRequest.Color));
-    }
-
-    bool anyVehicles = query.Any(); 
-
-    return Ok(anyVehicles);
-}
 
 }
+

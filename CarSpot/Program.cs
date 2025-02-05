@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 
  
-    {
+    
         var builder = WebApplication.CreateBuilder(args);
 
         
@@ -23,25 +23,17 @@ using Microsoft.EntityFrameworkCore;
         var app = builder.Build();
 
        
-        // Configurar middleware de autenticación y autorización
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-
        
-       
-
-
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
 
+       
+       
 
-
-
+       
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
@@ -49,4 +41,4 @@ using Microsoft.EntityFrameworkCore;
         app.MapControllers();
 
         app.Run();
-    }
+    
