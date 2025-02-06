@@ -85,178 +85,133 @@ public ActionResult<IEnumerable<Vehicle>> GetUserVehicles(int userId)
         return Ok(vehicles);
     }
 
-[Route("filter")]
-[HttpGet]
-public ActionResult<IEnumerable<Vehicle>> FilterVehicles([FromQuery] Vehicle filterRequest)
-    
-{
-    var query = _context.Vehicles.AsQueryable();
 
-    if (!string.IsNullOrEmpty(filterRequest.Make))
+
+
+[Route("filter-by-make")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> FilterByMake([FromQuery] string make)
+{
+    if (string.IsNullOrEmpty(make))
     {
-        query = query.Where(v => v.Make.Contains(filterRequest.Make));
+        return BadRequest("Debe proporcionar una marca para filtrar.");
     }
 
-    var vehicles = query.ToList();
+    var vehicleService = new VehicleService();
+    var filteredVehicles = vehicleService.FilterByMake(make);
 
-    return Ok(vehicles);
+    return Ok(filteredVehicles);
 }
+
+
+
 
    
-[Route("filter1")]
+[Route("filter-by-model")]
 [HttpGet]
-public ActionResult<IEnumerable<Vehicle>> Filter1Vehicles([FromQuery] Vehicle filterRequest)
-    
+public ActionResult<IEnumerable<Vehicle>> FilterByModel([FromQuery] string model)
 {
-    var query = _context.Vehicles.AsQueryable();
-
-    if (!string.IsNullOrEmpty(filterRequest.Model))
+    if (string.IsNullOrEmpty(model))
     {
-        query = query.Where(v => v.Model.Contains(filterRequest.Model));
+        return BadRequest("Debe proporcionar un modelo para filtrar.");
     }
 
-    var vehicles = query.ToList();
+    var vehicleService = new VehicleService();
+    var filteredVehicles = vehicleService.FilterByModel(model);
 
-    return Ok(vehicles);
+    return Ok(filteredVehicles);
 }
 
 
 
-[Route("filter2")]
+[Route("filter-by-year")]
 [HttpGet]
-public ActionResult<IEnumerable<Vehicle>> Filter2Vehicles([FromQuery] Vehicle filterRequest)
-    
+public ActionResult<IEnumerable<Vehicle>> FilterByYear([FromQuery] int year)
 {
-    var query = _context.Vehicles.AsQueryable();
+    var vehicleService = new VehicleService();
+    var filteredVehicles = vehicleService.FilterByYear(year);
 
-     if (filterRequest.YearStart != null)
-    {
-        query = query.Where(v => v.YearStart == filterRequest.YearStart);
-    }
-
-    var vehicles = query.ToList();
-
-    return Ok(vehicles);
+    return Ok(filteredVehicles);
 }
 
-[Route("filter3")]
-[HttpGet]
-public ActionResult<IEnumerable<Vehicle>> Filter3Vehicles([FromQuery] Vehicle filterRequest)
-    
-{
-    var query = _context.Vehicles.AsQueryable();
 
-     if (filterRequest.YearEnd != null)
+[Route("filter-by-price")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> FilterByPrice([FromQuery] decimal minPrice, [FromQuery] decimal maxPrice)
+{
+    if (minPrice < 0 || maxPrice < 0)
     {
-        query = query.Where(v => v.YearEnd == filterRequest.YearEnd);
+        return BadRequest("El precio debe ser un valor positivo.");
     }
 
-    var vehicles = query.ToList();
+    var vehicleService = new VehicleService();
+    var filteredVehicles = vehicleService.FilterByPrice(minPrice, maxPrice);
 
-    return Ok(vehicles);
+    return Ok(filteredVehicles);
 }
 
-[Route("filter4")]
-[HttpGet]
-public ActionResult<IEnumerable<Vehicle>> Filter4Vehicles([FromQuery] Vehicle filterRequest)
-    
-{
-    var query = _context.Vehicles.AsQueryable();
 
-     if (filterRequest.PriceStart != null)
+[Route("filter-by-city")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> FilterByCity([FromQuery] string city)
+{
+    if (string.IsNullOrEmpty(city))
     {
-        query = query.Where(v => v.PriceStart == filterRequest.PriceStart);
+        return BadRequest("Debe proporcionar una ciudad para filtrar.");
     }
 
-    var vehicles = query.ToList();
+    var vehicleService = new VehicleService();
+    var filteredVehicles = vehicleService.FilterByCity(city);
 
-    return Ok(vehicles);
+    return Ok(filteredVehicles);
 }
 
-[Route("filter5")]
+[Route("filter-by-condition")]
 [HttpGet]
-public ActionResult<IEnumerable<Vehicle>> Filter5Vehicles([FromQuery] Vehicle filterRequest)
-    
+public ActionResult<IEnumerable<Vehicle>> FilterByCondition([FromQuery] string condition)
 {
-    var query = _context.Vehicles.AsQueryable();
-
-     if (filterRequest.PriceEnd != null)
+    if (string.IsNullOrEmpty(condition))
     {
-        query = query.Where(v => v.PriceEnd == filterRequest.PriceEnd);
+        return BadRequest("Debe proporcionar una condición para filtrar.");
     }
 
-    var vehicles = query.ToList();
+    var vehicleService = new VehicleService();
+    var filteredVehicles = vehicleService.FilterByCondition(condition);
 
-    return Ok(vehicles);
+    return Ok(filteredVehicles);
 }
 
-[Route("filter6")]
+[Route("filter-by-transmission")]
 [HttpGet]
-public ActionResult<IEnumerable<Vehicle>> Filter6Vehicles([FromQuery] Vehicle filterRequest)
-    
+public ActionResult<IEnumerable<Vehicle>> FilterByTransmission([FromQuery] string transmissionType)
 {
-    var query = _context.Vehicles.AsQueryable();
-
-    if (!string.IsNullOrEmpty(filterRequest.City))
+    if (string.IsNullOrEmpty(transmissionType))
     {
-        query = query.Where(v => v.City.Contains(filterRequest.City));
+        return BadRequest("Debe proporcionar un tipo de transmisión para filtrar.");
     }
 
-    var vehicles = query.ToList();
+    var vehicleService = new VehicleService();
+    var filteredVehicles = vehicleService.FilterByTransmission(transmissionType);
 
-    return Ok(vehicles);
+    return Ok(filteredVehicles);
 }
 
-[Route("filter7")]
-[HttpGet]
-public ActionResult<IEnumerable<Vehicle>> Filter7Vehicles([FromQuery] Vehicle filterRequest)
-    
-{
-    var query = _context.Vehicles.AsQueryable();
 
-    if (!string.IsNullOrEmpty(filterRequest.Condition))
+[Route("filter-by-color")]
+[HttpGet]
+public ActionResult<IEnumerable<Vehicle>> FilterByColor([FromQuery] string color)
+{
+    if (string.IsNullOrEmpty(color))
     {
-        query = query.Where(v => v.Condition.Contains(filterRequest.Condition));
+        return BadRequest("Debe proporcionar un color para filtrar.");
     }
 
-    var vehicles = query.ToList();
+    var vehicleService = new VehicleService();
+    var filteredVehicles = vehicleService.FilterByColor(color);
 
-    return Ok(vehicles);
+    return Ok(filteredVehicles);
 }
 
-[Route("filter8")]
-[HttpGet]
-public ActionResult<IEnumerable<Vehicle>> Filter8Vehicles([FromQuery] Vehicle filterRequest)
-    
-{
-    var query = _context.Vehicles.AsQueryable();
-
-    if (!string.IsNullOrEmpty(filterRequest.TransmissionType))
-    {
-        query = query.Where(v => v.TransmissionType.Contains(filterRequest.TransmissionType));
-    }
-
-    var vehicles = query.ToList();
-
-    return Ok(vehicles);
-}
-
-[Route("filter9")]
-[HttpGet]
-public ActionResult<IEnumerable<Vehicle>> Filter9Vehicles([FromQuery] Vehicle filterRequest)
-    
-{
-    var query = _context.Vehicles.AsQueryable();
-
-    if (!string.IsNullOrEmpty(filterRequest.Color))
-    {
-        query = query.Where(v => v.Color.Contains(filterRequest.Color));
-    }
-
-    var vehicles = query.ToList();
-
-    return Ok(vehicles);
-}
 
 
 
