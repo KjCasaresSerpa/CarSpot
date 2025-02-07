@@ -6,7 +6,7 @@ public enum TipoEstablecimiento
     Dealer
 }
 
-public class Directory
+public class Establecimiento
 {
     public int Id { get; set; }
     public string NombreFiscal { get; set; }
