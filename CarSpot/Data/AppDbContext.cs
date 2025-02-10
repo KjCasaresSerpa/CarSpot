@@ -7,6 +7,8 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Vehicle> Vehicles {get; set;}
 
+    public DbSet<Establecimiento> Establecimientos {get; set;}
+
     /*internal async Task SaveChangesAsync()
     {
           throw new NotImplementedException();

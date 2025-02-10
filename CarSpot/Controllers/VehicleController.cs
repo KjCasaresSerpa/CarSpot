@@ -12,7 +12,7 @@ public class VehicleController : ControllerBase
         _context = context;
     }
 
-    
+  
     [HttpPost]
 public ActionResult<Vehicle> CreateVehicle(Vehicle vehicle)
     {
